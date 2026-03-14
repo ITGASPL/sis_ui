@@ -1,0 +1,277 @@
+<app-filter-bar></app-filter-bar>
+
+<div class="header">
+  <h2>Variant List</h2>
+  <div class="search-container">
+  <input type="text" placeholder="Search Variant..."
+    [(ngModel)]="searchText"
+      (input)="onSearch()"
+  class="search-input">
+  <div class="search-icon"></div>
+</div>
+  <button class="add-equipment-btn" (click)="showForm()">Add Variant</button>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Variant</th>
+      <th>Common Name</th>
+      <th>Program Number</th>
+      <th>Coil Code</th>
+       <th>Min. Thickness (mm)</th>
+      <th>Max. Thickness (mm)</th>
+      <th>Part Description</th>
+      <th>Feed Length (mm)</th>
+      <th>Width Nominal (mm)</th>
+      <th>Action</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let v of variantList">
+     
+      <td>{{ v.variantName }}</td>
+      <td>{{ v.commonName }}</td>
+        <td>{{ v.programDto.programNumber }}</td>
+      <td>{{ v.coilCode }}</td>
+      <td>{{ v.minimumSheetThickness }}</td>
+      <td>{{ v.maximumSheetThickness }}</td>
+        <td>{{ v.partDescription }}</td>
+       <td>{{ v.feedLength }}</td>
+       <td>{{ v.widthNominal }}</td>
+    
+  
+       <td class="actions">
+        <button (click)="edit(v)">✏️</button>&nbsp;&nbsp;
+        <button (click)="delete(v.id)">🗑️</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<mat-paginator
+  [length]="paginationDtls.totalElements"
+  [pageSize]="paginationDtls.pageSize"
+  [pageIndex]="paginationDtls.pageNumber - 1"
+  [pageSizeOptions]="[10]"
+  (page)="onPageChange($event)">
+</mat-paginator>
+
+
+<div class="form-modal" *ngIf="show">
+  <div class="form-card">
+    <div class="form-header">
+      <h3>{{ editMode ? 'Edit Variant' : 'Add Variant' }}</h3>
+      <button class="close-btn" (click)="close()">&#x2715;</button>
+    </div>
+ <form [formGroup]="form" (ngSubmit)="onSubmit()">
+  
+        <div class="form-row">
+            <!-- <div class="form-group">
+            <label>Program Number</label>
+
+         <select formControlName="programNumber">
+       <option [ngValue]="null">-- Select Program --</option>
+  <option *ngFor="let pitem of programList" [ngValue]="pitem">
+    {{ pitem.programNumber }}
+  </option>
+  </select>
+          </div> -->
+      <div class="form-group">
+  <label>Program Number</label>
+  <input 
+    type="text" 
+    class="form-control" 
+   formControlName="programNumber"
+    list="programOptions"
+    placeholder="Search Program" />
+
+  <datalist id="programOptions">
+    <option *ngFor="let pitem of programList" [value]="pitem.programNumber"></option>
+  </datalist>
+</div>
+
+
+
+          <div class="form-group">
+            <label>Program ID</label>
+         <input type="number" formControlName="programId"/>
+
+          </div>
+        </div>
+        <div class="form-row">
+          <!-- <div class="form-group">
+            <label>Variant Name</label>
+                <select formControlName="variantName">
+       <option [ngValue]="null">-- Select VariantName --</option>
+  <option *ngFor="let vitem of allVariant" [ngValue]="vitem">
+    {{ vitem.variantName }}
+  </option>
+  </select>
+          </div> -->
+
+          <div class="form-group">
+  <label>Variant Name</label>
+  <input 
+    type="text" 
+    class="form-control" 
+   formControlName="variantName"
+    list="variantOptions"
+    placeholder="Search Variant" />
+
+  <datalist id="variantOptions">
+    <option *ngFor="let vitem of allVariant" [value]="vitem.variantName"></option>
+  </datalist>
+</div>
+          
+                    <div class="form-group">
+            <label>Variant Code</label>
+
+
+      <input type="text" formControlName="variantCode"  [disabled]="true"  />
+          </div>
+          
+        </div>
+      
+        <div class="form-row">
+          <div class="form-group">
+            <label>Coil Code</label>
+      <input type="text" formControlName="coilCode" />
+          </div>
+          <div class="form-group">
+           <label>Minimum Sheet Thickness</label>
+      <input type="number" formControlName="minimumSheetThickness" />
+          </div>
+        </div>
+      
+        <div class="form-row">
+          <div class="form-group">
+             <label>Maximum Sheet Thickness</label>
+      <input type="number" formControlName="maximumSheetThickness" />
+          </div>
+          <div class="form-group">
+            <label>Nominal Sheet Thickness</label>
+      <input type="number" formControlName="nominalSheetThickness" />
+          </div>
+        </div>
+      
+        <div class="form-row">
+          <div class="form-group">
+           <label>Thickness Unit</label>
+      <input type="text" formControlName="thicknessUnit" />
+          </div>
+
+
+
+<div class="form-group">
+            <label>Common Name</label>
+            <input type="text" formControlName="commonName" />
+          </div>
+
+
+        </div>
+      
+        <div class="form-row">
+          <div class="form-group">
+             <label>Part Description</label>
+      <input type="text" formControlName="partDescription" />
+          </div>
+          <div class="form-group">
+            <label>Output 1 Description</label>
+      <input type="text" formControlName="output1Description" />
+          </div>
+        </div>
+      
+        <div class="form-row">
+          <div class="form-group">
+            <label>Feed Length</label>
+            <input type="number" formControlName="feedLength" />
+          </div>
+          <div class="form-group">
+             <label>Feed Length Unit</label>
+            <input type="text" formControlName="feedLengthUnit" />
+          </div>
+        </div>
+      
+        <div class="form-row">
+          <div class="form-group">
+             <label>Width Nominal</label>
+      <input type="number" formControlName="widthNominal" />
+          </div>
+          <div class="form-group">
+            <label>Width Unit</label>
+      <input type="text" formControlName="widthUnit" />
+          </div>
+        </div>
+      
+   <div class="form-row">
+    
+      <div class="form-group">
+        <label>Variant Type</label>
+          <select formControlName="varientType" class="form-control">
+          <option value="">-- Select Variant --</option>
+          <option value="Die">Die</option>
+          <option value="Oscillator">Oscillator</option>
+         </select>
+      </div>
+          <div class="form-group">
+             <label>DO (Die Offset (mm))</label>
+            <input type="number" step="0.01" formControlName="depthOffset" />
+          </div>
+        </div>
+
+    <div class="form-row">
+          <div class="form-group">
+            <label>LO1(Image Left Offset (mm))</label>
+            <input type="number" step="0.01"  formControlName="lo1" />
+          </div>
+          <div class="form-group" *ngIf="showLo2">
+             <label>LO2(Image Left Offset (mm))</label>
+            <input type="number" step="0.01" formControlName="lo2" />
+          </div>
+        </div>
+
+      <div class="form-row">
+  <!-- <div class="form-group">
+    <label>Upload Image</label>
+    <-- <input type="file" (change)="onImageSelected($event)" accept="image/*" /> ->
+   <input type="file" (change)="onFileSelected($event, 'main')" accept="image/*" />
+
+  </div>
+  <div class="form-group" *ngIf="showLo2">
+    <label>Upload Image</label>
+    <-- <input type="file" (change)="onImageSelected($event)" accept="image/*" /> ->
+   <input type="file" (change)="onFileSelected($event,'lo2')" accept="image/*" />
+
+  </div> -->
+
+<div class="form-group">
+  <label>Upload Image (Main)</label>
+  <input type="file" (change)="onFileSelected($event, 'main')" accept="image/*" />
+  <!-- Show existing image if available -->
+  <div *ngIf="image1">
+    <p>Current Image:</p>
+    <img [src]="image1" alt="Main Image" class="preview-img" />
+  </div>
+</div>
+
+<div class="form-group" *ngIf="showLo2">
+  <label>Upload Image (LO2)</label>
+  <input type="file" (change)="onFileSelected($event, 'lo2')" accept="image/*" />
+  <!-- Show existing image if available -->
+  <div *ngIf="image2">
+    <p>Current Image:</p>
+    <img [src]="image2" alt="LO2 Image" class="preview-img" />
+  </div>
+</div>
+
+
+
+</div>
+      
+        <button class="download-btn" type="submit">
+        {{ editMode ? 'Update' : 'Add' }}
+        </button>
+      </form>
+  </div>
+</div>

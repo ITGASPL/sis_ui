@@ -1,0 +1,107 @@
+.popup-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border: 4px solid #17C5D0;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  height: 100%;
+  width: 100%;
+}
+
+.image-section {
+  width: 62%;
+  position: relative;
+  border: 2px solid #00bcd4;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #f8f9fa;
+  padding: 0px;
+}
+
+
+
+
+.details-section {
+  width: 36%;
+  border: 2px solid #17C5D0;
+  padding: 0px;
+}
+
+.details-header {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #17C5D0;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.details-header p {
+  margin: 2px 0;
+  
+}
+.detail-label {
+ color:#058e97;
+}
+.defect-header {
+  border: 1px solid #17C5D0;
+  padding: 5px;
+  margin-bottom: 10px;
+   color:#058e97;
+}
+
+.defect-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.defect-table th,
+.defect-table td {
+  border: 1px solid #17C5D0;
+  text-align: center;
+  padding: 5px;
+}
+
+.defect-table thead {
+  background-color: #17C5D0;
+  color: white;
+}
+.inspection-popupview {
+  max-width: 1800px !important;
+  width: 100% !important;
+}
+
+.close-btn {
+  position: fixed;
+  top: 15px;
+  right: 24px;
+  background: #f44336; /* red background */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 24px;
+  line-height: 36px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 1000;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: #d32f2f;
+  }
+}
+  .ok-button {
+    background-color: #4CAF50;
+    color: white;
+    height: 20px;
+  }
+
+  .ng-button {
+    background-color: #f44336;
+    color: white;
+    height: 20px;
+    width: 30px;
+  }

@@ -1,0 +1,31 @@
+.popup-container {
+    padding: 16px;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    height: 650px;
+  }
+  
+  .popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .close-btn {
+    background: transparent;
+  }
+  
+  .full-width {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+  
+  .download-btn {
+    width: 100%;
+    background-color: #210077;
+    color: white;
+  }
+  

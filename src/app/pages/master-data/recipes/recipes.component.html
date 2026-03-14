@@ -1,0 +1,315 @@
+<app-filter-bar></app-filter-bar>
+<div class="header">
+  <h2>Recipes List</h2>
+  <div class="search-container">
+    <input type="text"
+     placeholder="Search Program Number..."
+      [(ngModel)]="searchText"
+      (input)="onSearch()"
+     class="search-input">
+    <div class="search-icon"></div>
+  </div>
+  <button class="add-equipment-btn" (click)="showForm()">Add Recipe</button>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Program Number</th>
+      <th>Equipment Id</th>
+      <th>Equipment Name</th>
+      <th>Model</th>
+      <th>Model Id</th>
+      <th>Camera Count</th>
+      <th>Variant Count</th>
+      <th>Updated By</th>
+      <th>Created By</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let r of recipeList">
+      <td>{{ r.programNumber }}</td>
+      <td>{{ r.equipmentId }}</td>
+      <td>{{ r.equipmentName }}</td>
+      <td>{{ r.model }}</td>
+      <td>{{ r.modelId }}</td>
+      <td>{{ r.cameraCount }}</td>
+     <td
+  [style.cursor]="r.listOfVarients?.length ? 'pointer' : 'default'"
+  [style.color]="r.listOfVarients?.length ? 'blue' : 'gray'"
+  [style.textDecoration]="r.listOfVarients?.length ? 'underline' : 'none'"
+  (click)="r.listOfVarients?.length ? toggleVariant(r) : null">
+  {{ r.listOfVarients ? r.listOfVarients.length : 0 }}
+</td>
+      <td>{{ r.updatedBy }}</td>
+      <td>{{ r.createdBy }}</td>
+      <td class="actions">
+        <button (click)="edit(r)">✏️</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<mat-paginator
+  [length]="paginationDtls.totalElements"
+  [pageSize]="paginationDtls.pageSize"
+  [pageIndex]="paginationDtls.pageNumber - 1"
+  [pageSizeOptions]="[10]"
+  (page)="onPageChange($event)">
+</mat-paginator>
+
+<!-- FORM MODAL -->
+<div class="form-modal" *ngIf="show">
+  <div class="form-card">
+    <div class="form-header">
+      <h3>{{ editMode ? 'Edit Recipe' : 'Add Recipe' }}</h3>
+      <button class="close-btn" (click)="close()">&#x2715;</button>
+    </div>
+
+    <!-- Minimal form -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="form-row">
+  <div class="form-group">
+    <label>Program Number</label>
+    <input type="number" formControlName="programNumber" />
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <label>Equipment Name</label>
+
+     <select formControlName="equipmentName">
+       <option [ngValue]="null">-- Select Equipment --</option>
+  <option *ngFor="let eitem of equipmentList" [ngValue]="eitem">
+    {{ eitem.equipmentName }}
+  </option>
+  </select>
+    <!-- <select formControlName="equipmentName">
+      <option *ngFor="let item of equipmentName" [value]="item.id">
+    {{ item.name }}
+  </option>
+    </select> -->
+     
+  </div>
+  <div class="form-group">
+    <label>Equipment ID</label>
+      <input type="text" formControlName="equipmentId" />
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <label>Model Name</label>
+    <select formControlName="modelName">
+       <option [ngValue]="null">-- Select Model --</option>
+  <option *ngFor="let item of modelList" [ngValue]="item">
+    {{ item.modelName }}
+  </option>
+</select>
+  </div>
+  <div class="form-group">
+    <label>Model ID</label>
+          <input type="text" formControlName="modelId"  />
+
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <label>Camera Count</label>
+   <input
+  type="number"
+  formControlName="cameraCount"
+  [disabled]="true"
+/>
+  </div>
+</div>
+ <!-- <div class="form-group"><label>Please Select Camera:</label></div>
+<div class="checkbox-grid">
+ 
+  <label class="checkbox-item" *ngFor="let cam of cameras">
+    Camera {{ cam.cameraId }}
+    <input
+      type="checkbox"
+      [value]="cam"
+      (change)="onCheckboxChange($event, cam.cameraId)"
+    />
+  </label>
+</div> -->
+
+<div formArrayName="cameraList">
+  <div class="form-group"><label>Please Select Camera:</label></div>
+  <div class="checkbox-grid">
+    <label class="checkbox-item" *ngFor="let cam of cameras">
+      Camera {{ cam.cameraNumber }}
+      <input
+        type="checkbox"
+        [checked]="isCameraSelected(cam)"
+        (change)="onCheckboxChange($event, cam)"
+      />
+    </label>
+  </div>
+</div>
+
+
+
+<button class="download-btn" type="submit">{{ editMode ? 'Update' : 'Add' }}</button>
+</form>
+
+  </div>
+</div>
+
+
+
+
+<div class="form-modal-table" *ngIf="showVariants">
+ <div class="variant-card">
+    <div class="form-header">
+   <h3>Variants List</h3>
+      <button class="close-btn" (click)="closeVariant()">&#x2715;</button>
+    </div>
+
+  
+<table border="1" cellpadding="5" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Variant Code</th>
+      <th>Variant Name</th>
+      <th>Common Name</th>
+      <th>Coil Code</th>
+      <th>Feed Length</th>
+      <th>Nominal Width</th>
+      <th>Nominal Thickness</th>
+      <th>Part Description</th>
+      <th>Output Description</th>
+      <th>Updated Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of variantList">
+      <td>{{ item.variantCode }}</td>
+      <td>{{ item.variantName }}</td>
+      <td>{{ item.commonName }}</td>
+      <td>{{ item.coilCode }}</td>
+      <td>{{ item.feedLength }} {{ item.feedLengthUnit }}</td>
+      <td>{{ item.widthNominal }} {{ item.widthUnit }}</td>
+      <td>{{ item.nominalSheetThickness }} {{ item.thicknessUnit }}</td>
+      <td>{{ item.partDescription }}</td>
+      <td>{{ item.output1Description }}</td>
+      <td>{{ item.updatedDate | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+ </div>
+</div>
+
+
+
+
+
+<!-- 
+ Recipe Form Modal 
+<div class="form-modal" *ngIf="show">
+  <div class="form-card">
+    <div class="form-header">
+      <h3>{{ editMode ? 'Edit Recipe' : 'Add Recipe' }}</h3>
+      <button class="close-btn" (click)="close()">&#x2715;</button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Equipment ID</label>
+            <input type="text" formControlName="equipmentId" />
+          </div>
+          <div class="form-group">
+            <label>Die Number</label>
+            <input type="number" formControlName="dieNumber" />
+          </div>
+        </div>
+      
+        <div class="form-row">
+          <div class="form-group">
+            <label>Model</label>
+            <input type="text" formControlName="model" />
+          </div>
+          <div class="form-group">
+            <label>Part Description</label>
+            <input type="text" formControlName="partDescription" />
+          </div>
+        </div>
+      
+        <div class="form-row">
+          <div class="form-group">
+            <label>Variant</label>
+            <input type="text" formControlName="variant" />
+          </div>
+          <div class="form-group">
+            <label>Coil Code</label>
+            <input type="text" formControlName="coilCode" />
+          </div>
+        </div>
+      
+        <div class="form-row">
+          <div class="form-group">
+            <label>Output Description</label>
+            <input type="text" formControlName="outputDescription" />
+          </div>
+          <div class="form-group">
+            <label>Thickness Nominal</label>
+            <input type="number" step="0.001" formControlName="thicknessNominal" />
+          </div>
+        </div>
+      
+        <div class="form-row">
+          <div class="form-group">
+            <label>Thickness Upper</label>
+            <input type="number" step="0.001" formControlName="thicknessUpper" />
+          </div>
+          <div class="form-group">
+            <label>Thickness Lower</label>
+            <input type="number" step="0.001" formControlName="thicknessLower" />
+          </div>
+        </div>
+      
+        <div class="form-row">
+          <div class="form-group">
+            <label>Thickness Unit</label>
+            <input type="text" formControlName="thicknessUnit" />
+          </div>
+          <div class="form-group">
+            <label>Feed Length</label>
+            <input type="number" formControlName="feedLength" />
+          </div>
+        </div>
+      
+        <div class="form-row">
+          <div class="form-group">
+            <label>Feed Length Unit</label>
+            <input type="text" formControlName="feedLengthUnit" />
+          </div>
+          <div class="form-group">
+            <label>Width Nominal</label>
+            <input type="number" formControlName="widthNominal" />
+          </div>
+        </div>
+      
+        <div class="form-row">
+          <div class="form-group">
+            <label>Width Unit</label>
+            <input type="text" formControlName="widthUnit" />
+          </div>
+        </div>
+      
+        <button class="download-btn" type="submit">
+          {{ editMode ? 'Update' : 'Add' }}
+        </button>
+      </form>
+      
+  </div>
+</div> -->

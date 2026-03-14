@@ -1,0 +1,44 @@
+<div class="popup-container">
+  <div class="popup-header">
+    <span>Download History</span>
+    <button mat-icon-button class="close-btn" (click)="dialogRef.close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Start Date</mat-label>
+    <input matInput [matDatepicker]="picker1" placeholder="dd-mm-yyyy" />
+    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>End Date</mat-label>
+    <input matInput [matDatepicker]="picker2" placeholder="dd-mm-yyyy" />
+    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+    <mat-datepicker #picker2></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <input matInput placeholder="Start Time: hh-mm" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <input matInput placeholder="End Time: hh-mm" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <input matInput placeholder="Model : All/ YY8/ YTB..." />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <input matInput placeholder="Part name : All/ SBO/ FDO/ FDI..." />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <input matInput placeholder="Defect Type : All/ Dent/ Ding..." />
+  </mat-form-field>
+
+  <button mat-flat-button color="primary" class="download-btn">Download</button>
+</div>

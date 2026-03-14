@@ -1,0 +1,31 @@
+<div class="popup-container">
+  <div class="popup-header">
+    <span>Download History</span>
+    <button mat-icon-button class="close-btn" (click)="dialogRef.close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Enter Date</mat-label>
+    <input
+      matInput
+      [matDatepicker]="picker1"
+      [(ngModel)]="fromDate"
+      placeholder="dd-mm-yyyy"
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1></mat-datepicker>
+  </mat-form-field>
+
+  <div class="report-label">Report : List/Graph</div>
+
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="onDownload()"
+    class="download-btn"
+  >
+    Download
+  </button>
+</div>

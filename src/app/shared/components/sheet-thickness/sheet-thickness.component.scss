@@ -1,0 +1,93 @@
+ .bg-error {
+    height: 18px;
+    margin: 0px;
+  }
+
+  .bg-success {
+    height: 18px;
+    margin: 0px;
+  }
+
+  table.mat-table td,
+  table.mat-table th {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+  }
+
+  .mat-table {
+    table-layout: fixed;
+    width: 100%;
+  }
+
+.truncate-text {
+  max-width: 120px;         /* You can adjust the width */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.system-title {
+  font-weight: bold;
+  background-color: #f0f0f0; 
+  padding: 8px 16px;
+  border-radius: 12px;
+  width: 100%;
+  display: block;
+  box-sizing: border-box;
+}
+
+
+
+.title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+   gap: 4px;
+   margin-bottom: 5px;
+}
+
+
+.datetime-display {
+  font-size: 12px;
+  font-weight: 500;
+  color: #444;
+  padding: 0;
+  margin-left: 0px; 
+
+  
+}
+.refresh-btn-circle {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, #4ef0f4, #00c4cc); 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.refresh-btn-circle mat-icon {
+  color: white;
+  font-size: 26px;
+  transition: transform 0.6s ease-in-out;
+}
+
+.refresh-btn-circle.spinning mat-icon {
+  animation: spinIcon 0.8s linear;
+}
+
+@keyframes spinIcon {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.mdc-data-table__cell, .mdc-data-table__header-cell {
+    padding: 0;
+}

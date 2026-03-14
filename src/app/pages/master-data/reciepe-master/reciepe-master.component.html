@@ -1,0 +1,242 @@
+<app-filter-bar></app-filter-bar>
+<div class="menu-bar">
+  <div class="menu-left"></div>
+
+  <div class="menu-right">
+    <button mat-button class="download_btn1">
+      <mat-icon>download</mat-icon>Download
+    </button>
+    <button mat-icon-button matTooltip="Notifications">
+      <mat-icon>notifications</mat-icon>
+    </button>
+  </div>
+</div>
+
+<body>
+  <div class="header-bar">
+    <h3>MASTER FILES</h3>
+    <div class="search-container">
+      <input type="text" placeholder="Search..." class="search-input" />
+      <div class="search-icon"></div>
+    </div>
+    <div class="upload-section">
+      <input type="file" class="file-input" />
+      <button class="upload-btn">Upload</button>
+      <button
+        mat-icon-button
+        class="refresh-btn-circle"
+        (click)="startSpin()"
+        [class.spinning]="isSpinning"
+        matTooltip="Refresh"
+      >
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Serial No.</th>
+        <th>Master File Name</th>
+        <th>Uploaded by</th>
+        <th>Uploaded on</th>
+        <th>3D Profile of Blank</th>
+        <th>Status</th>
+        <th>Download</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>28</td>
+        <td>Press-Shop_270125_122654.xlsx</td>
+        <td>dilpreet</td>
+        <td>27-01-2025 12:27 PM</td>
+        <td>
+          <img src="https://via.placeholder.com/60x30" class="profile-img" />
+        </td>
+        <td>
+          <div class="status">
+            <span class="status-dot green"></span> UPLOAD_SUCCESSFUL
+          </div>
+        </td>
+        <td>
+          <div mat-button class="download_btn2">
+            <mat-icon>download</mat-icon>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>27</td>
+        <td>Press-Shop_240125_152022.xlsx</td>
+        <td>dilpreet</td>
+        <td>24-01-2025 03:20 PM</td>
+        <td>
+          <img src="https://via.placeholder.com/60x30" class="profile-img" />
+        </td>
+        <td>
+          <div class="status">
+            <span class="status-dot green"></span> UPLOAD_SUCCESSFUL
+          </div>
+        </td>
+        <td>
+          <div mat-button class="download_btn2">
+            <mat-icon>download</mat-icon>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>26</td>
+        <td>Press-Shop_240125_150117.xlsx</td>
+        <td>dilpreet</td>
+        <td>24-01-2025 03:01 PM</td>
+        <td></td>
+        <td>
+          <div class="status">
+            <span class="status-dot red"></span> UPLOAD_FAILED
+            <i class="fa-solid fa-circle-info info-icon"></i>
+          </div>
+        </td>
+        <td>
+          <div mat-button class="download_btn2">
+            <mat-icon>download</mat-icon>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>25</td>
+        <td>Press-Shop_240125_150029.xlsx</td>
+        <td>dilpreet</td>
+        <td>24-01-2025 03:00 PM</td>
+        <td></td>
+        <td>
+          <div class="status">
+            <span class="status-dot red"></span> UPLOAD_FAILED
+            <i class="fa-solid fa-circle-info info-icon"></i>
+          </div>
+        </td>
+        <td>
+          <div mat-button class="download_btn2">
+            <mat-icon>download</mat-icon>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>24</td>
+        <td>Press-Shop_240125_145403.xlsx</td>
+        <td>dilpreet</td>
+        <td>24-01-2025 02:54 PM</td>
+        <td></td>
+        <td>
+          <div class="status">
+            <span class="status-dot red"></span> UPLOAD_FAILED
+            <i class="fa-solid fa-circle-info info-icon"></i>
+          </div>
+        </td>
+        <td>
+          <div mat-button class="download_btn2">
+            <mat-icon>download</mat-icon>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>23</td>
+        <td>Press-Shop_240125_145042.xlsx</td>
+        <td>dilpreet</td>
+        <td>24-01-2025 02:50 PM</td>
+        <td></td>
+        <td>
+          <div class="status">
+            <span class="status-dot red"></span> UPLOAD_FAILED
+            <i class="fa-solid fa-circle-info info-icon"></i>
+          </div>
+        </td>
+        <td>
+          <div mat-button class="download_btn2">
+            <mat-icon>download</mat-icon>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>22</td>
+        <td>Press-Shop_240125_131126.xlsx</td>
+        <td>sarthak</td>
+        <td>24-01-2025 01:11 PM</td>
+        <td></td>
+        <td>
+          <div class="status">
+            <span class="status-dot green"></span> UPLOAD_SUCCESSFUL
+          </div>
+        </td>
+        <td>
+          <div mat-button class="download_btn2">
+            <mat-icon>download</mat-icon>
+          </div>
+        </td>
+      </tr>
+      <!-- Add more rows as needed -->
+      <tr>
+        <td>21</td>
+        <td>Press-Shop_270125_122654.xlsx</td>
+        <td>dilpreet</td>
+        <td>27-01-2025 12:27 PM</td>
+        <td>
+          <img src="https://via.placeholder.com/60x30" class="profile-img" />
+        </td>
+        <td>
+          <div class="status">
+            <span class="status-dot green"></span> UPLOAD_SUCCESSFUL
+          </div>
+        </td>
+        <td>
+          <div mat-button class="download_btn2">
+            <mat-icon>download</mat-icon>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>20</td>
+        <td>Press-Shop_240125_152022.xlsx</td>
+        <td>dilpreet</td>
+        <td>24-01-2025 03:20 PM</td>
+        <td>
+          <img src="https://via.placeholder.com/60x30" class="profile-img" />
+        </td>
+        <td>
+          <div class="status">
+            <span class="status-dot green"></span> UPLOAD_SUCCESSFUL
+          </div>
+        </td>
+        <td>
+          <div mat-button class="download_btn2">
+            <mat-icon>download</mat-icon>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>19</td>
+        <td>Press-Shop_240125_150117.xlsx</td>
+        <td>dilpreet</td>
+        <td>24-01-2025 03:01 PM</td>
+        <td></td>
+        <td>
+          <div class="status">
+            <span class="status-dot red"></span> UPLOAD_FAILED
+            <i class="fa-solid fa-circle-info info-icon"></i>
+          </div>
+        </td>
+        <td>
+          <div mat-button class="download_btn2">
+            <mat-icon>download</mat-icon>
+          </div>
+        </td>
+      </tr>
+      <tr></tr>
+    </tbody>
+  </table>
+  <mat-paginator
+    class="paginator-align"
+    [pageSizeOptions]="[8, 10]"
+    showFirstLastButtons
+  ></mat-paginator>
+</body>

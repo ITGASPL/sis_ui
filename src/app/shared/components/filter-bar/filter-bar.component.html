@@ -1,0 +1,35 @@
+<div class="filter-bar">
+  <div class="last-updated">
+    <!-- Last Updated at : <span>{{ lastUpdated }}</span> -->
+  </div>
+
+  <div class="filters">
+    <label
+      >Site:
+      <select [(ngModel)]="selectedSite">
+        <option *ngFor="let site of sites">{{ site }}</option>
+      </select>
+    </label>
+
+    <label
+      >Location:
+      <select [(ngModel)]="selectedLocation">
+        <option *ngFor="let loc of locations">{{ loc }}</option>
+      </select>
+    </label>
+
+    <label
+      >Plant:
+      <select [(ngModel)]="selectedPlant">
+        <option *ngFor="let plant of plants">{{ plant }}</option>
+      </select>
+    </label>
+
+    <label
+      >Shop:
+      <select [(ngModel)]="selectedShop">
+        <option *ngFor="let shop of shops">{{ shop }}</option>
+      </select>
+    </label>
+  </div>
+</div>

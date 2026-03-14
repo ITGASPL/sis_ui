@@ -1,0 +1,128 @@
+<!-- <app-filter-bar></app-filter-bar>
+
+<div class="header">
+  <h2>Model List</h2>
+  <div class="search-container">
+ <input type="text" placeholder="Search model..." [(ngModel)]="searchText" (input)="onSearch()" />
+  <div class="search-icon"></div>
+</div>
+  <button class="add-equipment-btn" (click)="showForm()">Add Model</button>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      
+      <th>Model</th>
+      <th>Description</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let m of modelList">
+     
+      <td>{{ m.modelName }}</td>
+      <td>{{ m.description }}</td>
+       <td class="actions">
+        <button (click)="edit(m)">✏️</button>&nbsp;&nbsp;
+        <button (click)="deleteModel(m.id)">🗑️</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<mat-paginator [length]="paginationDtls.totalElements"
+               [pageSize]="paginationDtls.pageSize"
+               [pageIndex]="paginationDtls.pageNumber - 1"
+               (page)="onPageChange($event)">
+</mat-paginator>
+
+ Modal Form 
+<div class="form-modal" *ngIf="show">
+  <div class="form-card">
+    <div class="form-header">
+      <h3>{{ editMode ? 'Edit Model' : 'Add Model' }}</h3>
+      <button class="close-btn" (click)="close()">&#x2715;</button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <label>Model</label>
+      <input type="text" placeholder="Model" formControlName="modelName" />
+
+      <label>Description</label>
+      <input type="text" placeholder="Description" formControlName="description" />
+
+      <button class="download-btn" type="submit">{{ editMode ? 'Update' : 'Add' }}</button>
+    </form>
+  </div>
+</div> -->
+<app-filter-bar></app-filter-bar>
+
+<div class="header">
+  <h2>Model List</h2>
+  <div class="search-container">
+    <input
+      type="text"
+      placeholder="Search Model..."
+      [(ngModel)]="searchText"
+      (input)="onSearch()"
+      class="search-input"
+    />
+    <div class="search-icon"></div>
+  </div>
+  <button class="add-equipment-btn" (click)="showForm()">Add Model</button>
+</div>
+
+<table mat-table [dataSource]="modelList" class="mat-elevation-z8 full-width-table">
+  <!-- Model Name Column -->
+  <ng-container matColumnDef="modelName">
+    <th mat-header-cell *matHeaderCellDef>Model</th>
+    <td mat-cell *matCellDef="let m">{{ m.modelName }}</td>
+  </ng-container>
+
+  <!-- Description Column -->
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef>Description</th>
+    <td mat-cell *matCellDef="let m">{{ m.description }}</td>
+  </ng-container>
+
+  <!-- Action Column -->
+  <ng-container matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef>Action</th>
+    <td mat-cell *matCellDef="let m">
+      <button mat-icon-button color="primary" (click)="edit(m)">✏️</button>
+      <button mat-icon-button color="warn" (click)="deleteModel(m.id)">🗑️</button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="['modelName', 'description', 'action']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['modelName', 'description', 'action']"></tr>
+</table>
+
+<mat-paginator
+  [length]="paginationDtls.totalElements"
+  [pageSize]="paginationDtls.pageSize"
+  [pageIndex]="paginationDtls.pageNumber - 1"
+  [pageSizeOptions]="[10]"
+  (page)="onPageChange($event)">
+</mat-paginator>
+
+<!-- Modal Form -->
+<div class="form-modal" *ngIf="show">
+  <div class="form-card">
+    <div class="form-header">
+      <h3>{{ editMode ? 'Edit Model' : 'Add Model' }}</h3>
+      <button class="close-btn" (click)="close()">&#x2715;</button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <label for="modelName">Model</label>
+      <input id="modelName" type="text" placeholder="Model" formControlName="modelName" />
+
+      <label for="description">Description</label>
+      <input id="description" type="text" placeholder="Description" formControlName="description" />
+
+      <button class="download-btn" type="submit">{{ editMode ? 'Update' : 'Add' }}</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,104 @@
+<mat-card>
+  <mat-card-content>
+    <div class="system-title">
+      <div class="title-bar">
+        <mat-card-title style="font-weight: bold"
+          >Surface Inspection System</mat-card-title
+        >
+        <div class="datetime-display">
+          {{ tableFetchTime | date: "dd-MMM-yyyy HH:mm:ss" }}
+        </div>
+        <button
+          mat-icon-button
+          class="refresh-btn-circle"
+          (click)="startSpin()"
+          [class.spinning]="isSpinning"
+          matTooltip="Refresh"
+        >
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <!-- Sr. No Column -->
+      <ng-container matColumnDef="id">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          style="font-weight: bold; background-color: #f0f0f0"
+        >
+          Sr.No
+        </th>
+        <td mat-cell *matCellDef="let element; let index = index">
+          {{ index + 1 }}
+        </td>
+      </ng-container>
+
+      <!-- Part List Column -->
+      <ng-container matColumnDef="partList">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          style="font-weight: bold; background-color: #f0f0f0"
+        >
+          Part List
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="truncate-text" matTooltip="{{ element.partDescription }}">
+            {{ element.partDescription | slice: 0 : 15
+            }}<span *ngIf="element.partDescription.length > 15">...</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Actual Production Column -->
+      <ng-container matColumnDef="actualProduction">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          style="font-weight: bold; background-color: #f0f0f0"
+        >
+          Actual Production
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.totalSheets }}</td>
+      </ng-container>
+
+      <!-- Defect Qty Column -->
+      <ng-container matColumnDef="defectQty">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          style="font-weight: bold; background-color: #f0f0f0"
+        >
+          Defect Qty
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.totalDefects | number: "1.0-2" }}
+        </td>
+      </ng-container>
+
+      <!-- Quality Column -->
+      <ng-container matColumnDef="quality">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          style="font-weight: bold; background-color: #f0f0f0"
+        >
+          Quality
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.qualityPercentage }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <!-- Paginator -->
+    <mat-paginator
+      [pageSizeOptions]="[10]"
+      showFirstLastButtons
+    ></mat-paginator>
+  </mat-card-content>
+</mat-card>
