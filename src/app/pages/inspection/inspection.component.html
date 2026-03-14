@@ -1,0 +1,356 @@
+<div class="overlay" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>
+<div class="menu-bar">
+  <div class="menu-left">
+    <button mat-button [routerLink]="['/shop_view']" class="custom-nav-button1">
+      Shop View
+    </button>
+    <button
+      mat-button
+      [routerLink]="['/inspection']"
+      class="custom-nav-button1 current"
+    >
+      Inspection
+    </button>
+  </div>
+
+  <div class="menu-right">
+    <div class="filter-bar">
+      <div class="filters">
+        <label
+          >Site:
+          <select [(ngModel)]="selectedSite">
+            <option *ngFor="let site of sites">{{ site }}</option>
+          </select>
+        </label>
+
+        <label
+          >Location:
+          <select [(ngModel)]="selectedLocation">
+            <option *ngFor="let loc of locations">{{ loc }}</option>
+          </select>
+        </label>
+
+        <label
+          >Plant:
+          <select [(ngModel)]="selectedPlant">
+            <option *ngFor="let plant of plants">{{ plant }}</option>
+          </select>
+        </label>
+
+        <label
+          >Shop:
+          <select [(ngModel)]="selectedShop">
+            <option *ngFor="let shop of shops">{{ shop }}</option>
+          </select>
+        </label>
+      </div>
+    </div>
+    <button mat-button class="download_btn1" (click)="openDialog()">
+      <mat-icon>download</mat-icon>Download
+    </button>
+  </div>
+</div>
+
+<app-mchine-live-status [showToggle]="false"></app-mchine-live-status>
+
+<div class="row">
+  <div class="col-lg-6">
+    <mat-card>
+      <mat-card-content>
+        <button
+          mat-icon-button
+          class="refresh-btn-circle"
+          (click)="startSpin()"
+          [class.spinning]="isSpinning"
+          matTooltip="Refresh"
+        >
+          <mat-icon>refresh</mat-icon>
+        </button>
+        <div class="model-info-bar">
+          <div class="model-details">
+            <div class="info-wrapper">
+              <span
+                >Model:
+                <strong>{{ currentDyeData?.modelName }}</strong>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span
+                  >PE code:
+                  <strong>{{ currentDyeData?.coilCode }}</strong></span
+                >&nbsp;&nbsp;&nbsp;&nbsp;<span
+                  >Program No:
+                  <strong>{{ currentDyeData?.programNumber }}</strong></span
+                >
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag"
+                  >Shift: <strong>{{ currentShift }}</strong></span
+                >
+                <span class="refreshTime">{{
+                  getCurrentDyeDataTime | date: "dd-MMM-yyyy HH:mm:ss"
+                }}</span>
+              </span>
+
+              <span
+                >Part name: <strong>{{ currentDyeData?.varientName }}</strong
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="tag"
+                  >Production Date:
+                  <strong>{{ getCurrentDate() }}</strong></span
+                ></span
+              >
+            </div>
+          </div>
+
+          <div class="variant-select"></div>
+        </div>
+        <div class="card_summary">
+          <div>• Actual Production Quantity</div>
+          <!-- Progress bar -->
+          <mat-progress-bar
+            class="custom-progress-bar"
+            mode="determinate"
+            [value]="currentDyeData?.qualityPercentage || 0"
+          >
+          </mat-progress-bar>
+          <div class="details">
+            <div>
+              {{ currentDyeData?.totalSheets || 0 }}<br /><small>Total</small>
+            </div>
+            <div>
+              {{ currentDyeData?.totalGoodSheets || 0 }}<br /><small>OK</small>
+            </div>
+            <div>
+              {{ currentDyeData?.totalDefectiveSheets || 0 }}<br /><small
+                >NG</small
+              >
+            </div>
+            <div>
+              {{
+                currentDyeData?.qualityPercentage || 0 | number: "1.2-2"
+              }}%<br /><small>Quality</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <app-inspection-table
+            [inspectionTableData]="summaryData"
+            [cuttingImageUrlLink1]="cuttingImageUrl1"
+            [cuttingImageUrlLink2]="cuttingImageUrl2"
+            [variantType]="variantType"
+            [leftOffset1]="leftOffset1"
+            [leftOffset2]="leftOffset2"
+          ></app-inspection-table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <div
+      class="container"
+      style="
+        background-color: white;
+
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        padding: 5px;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 600px;
+        height: 16vh;
+        visibility: hidden;
+        margin-left: 5px;
+      "
+    >
+      <h4 style="padding-bottom: 1%; padding-top: 0%">
+        Alert Message or Alarm
+      </h4>
+      <div class="warning-box red-bg">
+        <img src="assets/images/warning.png" alt="warning" />
+
+        Machine Stop : NG Blank detected
+      </div>
+
+      <div class="warning-box yellow-bg">
+        <img src="assets/images/warning.png" alt="warning" />
+
+        Take Piler out and check the Blanks
+      </div>
+
+      <div class="warning-box red-bg">
+        <img src="assets/images/warning.png" alt="warning" />
+
+        Network not connected
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6" style="margin-top: -6px">
+    <mat-card class="inspection_result">
+      <mat-card-content>
+        <mat-card-title>
+          <div class="header">
+            <div class="title-row">
+              <span class="left"
+                >Sheet Number: <strong>{{ latestData?.sheetCount }}</strong>
+              </span>
+              <span class="center"
+                >Sheet Thickness:
+                <strong>{{ latestData?.sheetThickness }}</strong></span
+              >
+              <span class="right">Time: {{ latestData?.timestamp }}</span>
+            </div>
+          </div>
+        </mat-card-title>
+        <div class="header">
+          <div class="inspection-dashboard" style="margin-top: -8px">
+            <div class="status-section">
+              <div class="overall-result">
+                <mat-card-title class="img_title">
+                  Overall Result:
+                </mat-card-title>
+                <button
+                  [ngClass]="{
+                    'btn-ok': latestData?.overallStatus,
+                    'btn-ng': !latestData?.overallStatus,
+                  }"
+                >
+                  {{ latestData?.overallStatus ? "OK" : "Not OK" }}
+                </button>
+              </div>
+
+              <div class="camera-results">
+                <mat-card-title class="img_title"
+                  >Camera Results:</mat-card-title
+                >
+
+                <div class="camera-buttons">
+                  <button
+                    [ngClass]="{
+                      'btn-ok': latestData?.[1],
+                      'btn-ng': !latestData?.[1],
+                    }"
+                  >
+                    Camera 1
+                  </button>
+                  <button
+                    [ngClass]="{
+                      'btn-ok': latestData?.[2],
+                      'btn-ng': !latestData?.[2],
+                    }"
+                  >
+                    Camera 2
+                  </button>
+                  <button
+                    [ngClass]="{
+                      'btn-ok': latestData?.[3],
+                      'btn-ng': !latestData?.[3],
+                    }"
+                  >
+                    Camera 3
+                  </button>
+                </div>
+
+                <div class="camera-buttons">
+                  <button
+                    [ngClass]="{
+                      'btn-ok': latestData?.[4],
+                      'btn-ng': !latestData?.[4],
+                    }"
+                  >
+                    Camera 4
+                  </button>
+                  <button
+                    [ngClass]="{
+                      'btn-ok': latestData?.[5],
+                      'btn-ng': !latestData?.[5],
+                    }"
+                  >
+                    Camera 5
+                  </button>
+                  <button
+                    [ngClass]="{
+                      'btn-ok': latestData?.[6],
+                      'btn-ng': !latestData?.[6],
+                    }"
+                  >
+                    Camera 6
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="target-label1">Defect Image Coordinates</div>
+
+        <div class="canvas-container">
+          <div class="grey-bg"></div>
+
+          <img
+            [src]="cuttingImageUrl1"
+            alt="Die Image not getting"
+            class="base-img"
+          />
+
+          <svg
+            class="circle-layer"
+            viewBox="0 0 830 540"
+            preserveAspectRatio="none"
+          >
+            <circle
+              *ngFor="let point of latestData?.points"
+              [attr.cx]="point.x"
+              [attr.cy]="point.y"
+              r="5"
+              fill="red"
+              stroke="red"
+              stroke-width="0"
+            />
+          </svg>
+        </div>
+
+        <style>
+          .target-label1 {
+            font-weight: bold;
+            font-size: 18px;
+            color: #222;
+            text-align: center;
+            margin-bottom: 10px;
+            background: none !important;
+          }
+          .canvas-container {
+            position: relative;
+            width: 100%;
+            max-width: 830px;
+            aspect-ratio: 830 / 540;
+            border: 1px solid #ccc;
+            overflow: hidden;
+            background-color: #908989;
+            border-radius: 15px;
+          }
+
+          .grey-bg {
+            display: none;
+          }
+
+          .base-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            opacity: 0.31;
+            z-index: 2;
+          }
+
+          .circle-layer {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            pointer-events: none;
+          }
+        </style>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

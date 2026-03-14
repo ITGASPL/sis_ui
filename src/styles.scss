@@ -1,0 +1,50 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+::ng-deep .inspection-popupview .mat-mdc-dialog-container {
+  max-width: none !important;
+  width: 1800px !important;
+}
+
+
+.boxed-auth .mat-dialog-container {
+  border-radius: 42px !important;
+  box-shadow:
+    0 15px 25px rgba(0, 0, 0, 0.05),
+    0 20px 35px rgba(0, 0, 0, 0.08),
+    0 30px 55px rgba(0, 0, 0, 0.1);
+  background-color: #bf1010 !important;
+}
+
+
+/* styles.css or styles.scss */
+.error-snackbar {
+  background-color: #f44336 !important; /* red */
+  color: white !important;
+  font-weight: 500;
+}
+
+
+.success-snackbar {
+  background-color: #4caf50 !important; /* green */
+  color: white !important;
+  font-weight: 500;
+}
+
+
+
+
+
+
+   //background-color: #ff9800 !important;
+   .mat-mdc-snack-bar-container,
+.mat-mdc-snackbar-surface,
+.mdc-snackbar__surface {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+

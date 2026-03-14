@@ -1,0 +1,56 @@
+<app-filter-bar></app-filter-bar>
+
+<div class="header">
+  <h2>Breaks List</h2>
+  <div class="search-container">
+    <input type="text" placeholder="Search..." class="search-input" />
+    <div class="search-icon"></div>
+  </div>
+  <button class="add-equipment-btn" (click)="showForm()">Add Break</button>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Start</th>
+      <th>End</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let b of breakList">
+      <td>{{ b.start }}</td>
+      <td>{{ b.end }}</td>
+      <td class="actions">
+        <button (click)="edit(b)">✏️</button>&nbsp;&nbsp;
+        <button (click)="delete(b.id)">🗑️</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<mat-paginator
+  class="paginator-align"
+  [pageSizeOptions]="[8, 10]"
+  showFirstLastButtons
+></mat-paginator>
+
+<div class="form-modal" *ngIf="show">
+  <div class="form-card">
+    <div class="form-header">
+      <h3>{{ editMode ? "Edit Break" : "Add Break" }}</h3>
+      <button class="close-btn" (click)="close()">&#x2715;</button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <label>Start</label>
+      <input type="time" step="1" formControlName="start" />
+
+      <label>End</label>
+      <input type="time" step="1" formControlName="end" />
+
+      <button class="download-btn" type="submit">
+        {{ editMode ? "Update" : "Add" }}
+      </button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,221 @@
+<button class="close-btn" (click)="closePopup()">&#x2715;</button>
+
+<div *ngIf="isLoading" class="popup-loading-container">
+  <mat-spinner diameter="60"></mat-spinner>
+  <p>Loading data, please wait...</p>
+</div>
+<div *ngIf="!isLoading" class="popup-container">
+  <div class="image-section">
+    <div
+      class="image-wrapper"
+      [style.transform]="transform"
+      (wheel)="onWheel($event)"
+    >
+      <div class="image-stack">
+        <img
+          [src]="data.imageUrl"
+          alt="Stitched Image"
+          class="stich-img"
+          [style.margin-left.px]="data.leftOffset"
+        />
+
+        <img [src]="data.cuttingImageUrl" alt="Die Image" class="die-img" />
+      </div>
+    </div>
+    <div class="zoom-controls">
+      <button mat-raised-button color="primary" (click)="zoomIn()">+</button>
+      <button mat-raised-button color="warn" (click)="zoomOut()">-</button>
+      <button mat-raised-button (click)="resetZoom()">Reset</button>
+    </div>
+  </div>
+
+  <div class="details-section">
+    <div class="details-header">
+      <div>
+        <p>
+          <b><span class="detail-label">Sheet Number:</span></b
+          >{{ data.selectedRowData?.sheetNumber.split("_")[1] }}
+        </p>
+        <p>
+          <b><span class="detail-label">Inspection Result:</span></b>
+          <button
+            *ngIf="data.selectedRowData?.inspectionResult === 1"
+            mat-flat-button
+            class="ok-button"
+          >
+            OK
+          </button>
+          <button
+            *ngIf="data.selectedRowData?.inspectionResult !== 1"
+            mat-flat-button
+            class="ng-button"
+          >
+            NG
+          </button>
+        </p>
+        <p>
+          <b><span class="detail-label">Start Time:</span></b>
+          {{ data.selectedRowData?.startTime | date: "dd-MMM-yyyy HH:mm:ss" }}
+        </p>
+        <p>
+          <b><span class="detail-label">Model Name:</span></b>
+          {{ data.selectedRowData?.modelName }}
+        </p>
+        <p>
+          <b><span class="detail-label">Operator Inspection Result:</span></b>
+          {{ data.selectedRowData?.operatorInspectionResult }}
+        </p>
+      </div>
+      <div>
+        <p>
+          <b><span class="detail-label">Sheet Thickness:</span></b>
+          {{ data.selectedRowData?.sheetThickness | number: "1.2-2" }}
+        </p>
+        <p>
+          <b><span class="detail-label">Defect Type:</span></b
+          >NA
+        </p>
+        <p>
+          <b><span class="detail-label">End Time:</span></b>
+          {{ data.selectedRowData?.endTime | date: "dd-MMM-yyyy HH:mm:ss" }}
+        </p>
+        <p>
+          <b><span class="detail-label">Part Name:</span></b>
+          {{ data.partName }}
+        </p>
+        <p>
+          <b><span class="detail-label">(O)Log Time:</span></b
+          >{{
+            data.selectedRowData?.operatorLogTime | date: "dd-MMM-yyyy HH:mm:ss"
+          }}
+        </p>
+      </div>
+    </div>
+
+    <div class="defect-header">
+      <b>Operator Defect types:</b
+      >{{ data.selectedRowData?.operatorDefectTypes }}
+    </div>
+
+    <table class="defect-table">
+      <thead>
+        <tr>
+          <th>X</th>
+          <th>Y</th>
+          <th>X</th>
+          <th>Y</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pair of pairs">
+          <td>{{ pair[0]?.xSheetwise }}</td>
+          <td>{{ pair[0]?.ySheetwise }}</td>
+          <td>{{ pair[1]?.xSheetwise }}</td>
+          <td>{{ pair[1]?.ySheetwise }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<style>
+  .image-section {
+    position: relative;
+    overflow: auto;
+  }
+
+  .image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 98vh;
+    overflow: auto;
+    border: 1px solid #225c65;
+
+    background-color: #fbfbfb;
+
+    transform-origin: top left;
+    transition: transform 0.3s ease;
+    display: inline-block;
+  }
+
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .image-stack {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: block;
+    text-align: left;
+    overflow: hidden;
+  }
+
+  .stich-img,
+  .die-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    object-fit: contain;
+
+    display: block;
+    max-width: none;
+  }
+
+  .stich-img {
+    z-index: 1;
+    opacity: 1;
+  }
+  .die-img {
+    z-index: 2;
+    opacity: 0.35;
+    pointer-events: none;
+    transform: translateX(0);
+  }
+
+  .zoom-controls {
+    position: fixed;
+    bottom: 30px;
+    left: 32%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 8px 12px;
+    border-radius: 25px;
+    z-index: 10;
+  }
+
+  .zoom-controls button {
+    color: #fff;
+    background-color: #17c5d0;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .zoom-controls button:hover {
+    background-color: #17c5d0;
+  }
+
+  .popup-loading-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    text-align: center;
+    color: #555;
+    border: 4px solid #17c5d0;
+  }
+</style>

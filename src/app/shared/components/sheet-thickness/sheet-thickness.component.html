@@ -1,0 +1,118 @@
+<mat-card>
+  <mat-card-content>
+    <div class="title-bar">
+      <mat-card-title class="system-title"
+        >Sheet Thickness Detection System</mat-card-title
+      >
+    </div>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <!-- Sr.No Column -->
+      <ng-container matColumnDef="id">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          style="font-weight: bold; background-color: #f0f0f0"
+        >
+          Sr.No
+        </th>
+        <td mat-cell *matCellDef="let element; let index = index">
+          {{ index + 1 }}
+        </td>
+      </ng-container>
+
+      <!-- Part List Column -->
+      <ng-container matColumnDef="partList">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          style="font-weight: bold; background-color: #f0f0f0"
+        >
+          Part List
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="truncate-text" matTooltip="{{ element.partDescription }}">
+            {{ element.partDescription | slice: 0 : 12
+            }}<span *ngIf="element.partDescription.length > 12">...</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Required Thickness Column -->
+      <ng-container matColumnDef="requiredThickness">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          style="font-weight: bold; background-color: #f0f0f0"
+        >
+          Required Thickness <br />
+          min &nbsp;&nbsp;max
+        </th>
+
+        <td mat-cell *matCellDef="let element">
+          {{ element.requiredMinThickness?.toFixed(2) }}&nbsp;&nbsp;{{
+            element.requiredMaxThickness?.toFixed(2)
+          }}
+        </td>
+      </ng-container>
+      requiredMaxThickness
+      <!-- Actual Thickness Range Column -->
+      <ng-container matColumnDef="actualThicknessRange">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          style="font-weight: bold; background-color: #f0f0f0"
+        >
+          Actual Thickness<br />
+          min &nbsp;&nbsp; max
+        </th>
+
+        <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+          Actual Thickness<br />
+          min &nbsp;&nbsp; max
+        </th>
+
+        <td mat-cell *matCellDef="let element">
+          {{ element?.actualMinThickness?.toFixed(2) }}&nbsp;&nbsp;
+          {{ element?.actualMaxThickness?.toFixed(2) }}
+        </td>
+      </ng-container>
+
+      <!-- Result Column -->
+      <ng-container matColumnDef="result">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          style="font-weight: bold; background-color: #f0f0f0"
+        >
+          Result
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <button
+            *ngIf="element.result == 'NG'"
+            mat-flat-button
+            class="bg-error text-white"
+          >
+            NG
+          </button>
+          <button
+            *ngIf="element.result == 'OK'"
+            mat-flat-button
+            class="bg-success text-white"
+          >
+            OK
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- Header & Row -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <!-- Paginator -->
+    <mat-paginator
+      [pageSizeOptions]="[10]"
+      showFirstLastButtons
+    ></mat-paginator>
+  </mat-card-content>
+</mat-card>

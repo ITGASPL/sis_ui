@@ -1,0 +1,198 @@
+<!-- ============================================================== -->
+<!-- Simple four boxes Row -->
+<!-- ============================================================== -->
+<div class="overlay" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div class="menu-bar">
+  <div class="menu-left">
+    <button
+      mat-button
+      [routerLink]="['/shop_view']"
+      class="custom-nav-button current"
+    >
+      Shop View
+    </button>
+    <button mat-button [routerLink]="['/inspection']" class="custom-nav-button">
+      Inspection
+    </button>
+  </div>
+
+  <div class="menu-right">
+    <div class="filter-bar">
+      <div class="filters">
+        <label
+          >Site:
+          <select [(ngModel)]="selectedSite">
+            <option *ngFor="let site of sites">{{ site }}</option>
+          </select>
+        </label>
+
+        <label
+          >Location:
+          <select [(ngModel)]="selectedLocation">
+            <option *ngFor="let loc of locations">{{ loc }}</option>
+          </select>
+        </label>
+
+        <label
+          >Plant:
+          <select [(ngModel)]="selectedPlant">
+            <option *ngFor="let plant of plants">{{ plant }}</option>
+          </select>
+        </label>
+
+        <label
+          >Shop:
+          <select [(ngModel)]="selectedShop">
+            <option *ngFor="let shop of shops">{{ shop }}</option>
+          </select>
+        </label>
+      </div>
+    </div>
+    <button mat-button class="download_btn1" (click)="openDialog()">
+      <mat-icon>download</mat-icon>Download
+    </button>
+  </div>
+</div>
+<app-mchine-live-status
+  [isChecked]="isDayView"
+  (toggleChanged)="toggleView($event)"
+  [showToggle]="true"
+></app-mchine-live-status>
+
+<div class="row">
+  <div class="col-lg-8">
+    <div class="row" style="width: auto">
+      <div class="col-lg-6">
+        <div *ngIf="loadingProductPerformance" class="custom-spinner">
+          <div class="icon-wrapper">
+            <svg class="loader-svg" viewBox="0 0 50 50">
+              <circle class="loader-bg" cx="25" cy="25" r="20"></circle>
+              <circle class="loader-fg" cx="25" cy="25" r="20"></circle>
+            </svg>
+            <span class="loader-text">Loading Surface Inspection Data...</span>
+          </div>
+        </div>
+
+        <div *ngIf="errorProductPerformance" class="error">
+          {{ errorProductPerformance }}
+        </div>
+
+        <app-product-performance
+          *ngIf="!loadingProductPerformance && !errorProductPerformance"
+          [tableFetchTime]="tableFetchTime"
+          (fetchtableData)="fetchTableData($event)"
+          [productPerformanceData]="elementData"
+        >
+        </app-product-performance>
+      </div>
+
+      <div class="col-lg-6">
+        <div *ngIf="loadingSheetThickness" class="custom-spinner">
+          <div class="icon-wrapper">
+            <svg class="loader-svg" viewBox="0 0 50 50">
+              <circle class="loader-bg" cx="25" cy="25" r="20"></circle>
+              <circle class="loader-fg" cx="25" cy="25" r="20"></circle>
+            </svg>
+            <span class="loader-text">Loading Sheet Thickness Data...</span>
+          </div>
+        </div>
+
+        <div *ngIf="errorSheetThickness" class="error">
+          {{ errorSheetThickness }}
+        </div>
+
+        <sheet-thickness-detection
+          *ngIf="!loadingSheetThickness && !errorSheetThickness"
+          [tableFetchTime]="tableFetchTime"
+          [productData]="elementData"
+        >
+        </sheet-thickness-detection>
+      </div>
+      <div class="container" style="display: none">
+        <h4 style="padding-bottom: 1%; margin-top: -10px">
+          Alert Message or Alarm
+        </h4>
+        <div class="warning-box red-bg">
+          <img src="assets/images/warning.png" alt="Warning" />
+          Machine Stop : NG Blank detected
+        </div>
+
+        <div class="warning-box yellow-bg">
+          <img src="assets/images/warning.png" alt="Warning" />
+          Take Piler out and check the Blanks
+        </div>
+
+        <div class="warning-box red-bg">
+          <img src="assets/images/warning.png" alt="Warning" />
+          Network not connected
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="title-bar">
+      <div class="right-align-refresh">
+        <div class="datetime-display">
+          {{ chartDataFetchTime | date: "dd-MMM-yyyy HH:mm:ss" }}
+        </div>
+        <button
+          mat-icon-button
+          class="refresh-btn-circle"
+          (click)="startSpin()"
+          [class.spinning]="isSpinning"
+          matTooltip="Refresh"
+        >
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="scroll-container" style="padding-left: -30px">
+      <div *ngIf="loadingBarchart" class="custom-spinner">
+        <div class="icon-wrapper">
+          <svg class="loader-svg" viewBox="0 0 50 50">
+            <circle class="loader-bg" cx="25" cy="25" r="20"></circle>
+            <circle class="loader-fg" cx="25" cy="25" r="20"></circle>
+          </svg>
+          <span class="loader-text">Loading BarChart...</span>
+        </div>
+      </div>
+
+      <div *ngIf="errorMessageBarchart" class="error">
+        {{ errorMessageBarchart }}
+      </div>
+      <app-chart
+        *ngIf="!loadingBarchart && !errorMessageBarchart"
+        [partData]="barchartData"
+      ></app-chart>
+    </div>
+
+    <br />
+
+    <div
+      class="scroll-container"
+      style="padding-left: -5px; padding-right: -20px"
+    >
+      <div *ngIf="loadingPieChart" class="custom-spinner">
+        <div class="icon-wrapper">
+          <svg class="loader-svg" viewBox="0 0 50 50">
+            <circle class="loader-bg" cx="25" cy="25" r="20"></circle>
+            <circle class="loader-fg" cx="25" cy="25" r="20"></circle>
+          </svg>
+          <span class="loader-text">Loading PieChart...</span>
+        </div>
+      </div>
+
+      <div *ngIf="errorMessagePieChart" class="error">
+        {{ errorMessagePieChart }}
+      </div>
+      <app-pie-chart
+        *ngIf="!loadingPieChart && !errorMessagePieChart"
+        [data]="piechartData"
+      ></app-pie-chart>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,187 @@
+<div class="login_container">
+  <mat-card-content class="p-32">
+    <div class="text-center">
+      <a [routerLink]="">
+        <img
+          src="./assets/images/logos/suzuki_logo.jpg"
+          width="440"
+          height="50"
+          class="align-middle m-2 login-logo"
+          alt="logo"
+        />
+      </a>
+    </div>
+    <div class="close-button" (click)="onClose()">×</div>
+
+    <div class="or-border m-t-30">Login with your Credentials</div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="m-t-30">
+      <mat-label class="form-label">Username</mat-label>
+      <mat-form-field appearance="outline" class="w-100" color="primary">
+        <input
+          matInput
+          formControlName="username"
+          placeholder="Enter username"
+        />
+        <mat-error *ngIf="loginForm.get('username')?.hasError('required')">
+          Username is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-label class="form-label">Password</mat-label>
+      <mat-form-field appearance="outline" class="w-100" color="primary">
+        <input
+          matInput
+          type="password"
+          formControlName="password"
+          placeholder="Enter password"
+        />
+        <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+          Password is required
+        </mat-error>
+        <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">
+          Password must be at least 6 characters
+        </mat-error>
+      </mat-form-field>
+
+      <button
+        mat-flat-button
+        color="primary"
+        class="w-100 login-btn"
+        type="submit"
+      >
+        Login
+      </button>
+    </form>
+    <div class="text-danger mt-2">
+      {{ loginErrorMessage }}
+    </div>
+  </mat-card-content>
+</div>
+
+<style>
+  .mat-dialog-container {
+    border-radius: 42px !important;
+    box-shadow:
+      0 15px 25px rgba(0, 0, 0, 0.05),
+      0 20px 35px rgba(0, 0, 0, 0.08),
+      0 30px 55px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff !important;
+  }
+
+  .blank-layout-container {
+    height: 100vh;
+    display: flex;
+    background: #ffffff;
+  }
+
+  .login_container {
+    background: #ffffff;
+  }
+
+  .boxed-auth {
+    border-radius: 42px !important;
+    box-shadow:
+      0 15px 25px rgba(0, 0, 0, 0.05),
+      0 20px 35px rgba(0, 0, 0, 0.08),
+      0 30px 55px rgba(0, 0, 0, 0.1);
+
+    background: #ffffff !important;
+  }
+  .boxed-auth:hover {
+    box-shadow:
+      0 35px 45px rgba(0, 0, 0, 0.08),
+      0 40px 60px rgba(0, 0, 0, 0.12),
+      0 50px 80px rgba(0, 0, 0, 0.15);
+  }
+
+  .p-32 {
+    padding: 32px;
+  }
+
+  .form-label {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: block;
+    color: #444;
+  }
+
+  .login-btn {
+    padding: 12px;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 12px;
+    border-radius: 14px;
+    transition: all 0.3s ease;
+    background-color: #17c5d0;
+  }
+
+  .login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(33, 150, 243, 0.2);
+  }
+
+  .social-btn {
+    border-radius: 14px;
+    transition: 0.3s ease;
+  }
+  .social-btn:hover {
+    background-color: #f2f2f2;
+    transform: scale(1.02);
+  }
+
+  .or-border {
+    text-align: center;
+    position: relative;
+    font-weight: 500;
+    font-size: 14px;
+    color: #999;
+    margin: 24px 0;
+  }
+
+  .or-border::before,
+  .or-border::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 27%;
+    height: 1px;
+    background: #ccc;
+  }
+
+  .or-border::before {
+    left: 0;
+  }
+
+  .or-border::after {
+    right: 0;
+  }
+  .text-danger {
+    color: red;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 16px;
+    font-size: 35px;
+    font-weight: bold;
+    color: #e53935;
+    cursor: pointer;
+    background: #f5f5f5;
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+  }
+
+  .close-button:hover {
+    background: #ffe6e6;
+    color: #e53935;
+    transform: rotate(90deg);
+  }
+</style>

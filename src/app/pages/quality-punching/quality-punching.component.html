@@ -1,0 +1,140 @@
+<div class="overlay" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>
+<app-filter-bar></app-filter-bar>
+
+<div class="menu-bar">
+  <div class="menu-left"></div>
+
+  <div class="menu-right">
+    <button mat-button class="download_btn1" (click)="openPopup()">
+      <mat-icon>download</mat-icon>Download
+    </button>
+
+    <button mat-icon-button matTooltip="Notifications">
+      <mat-icon>notifications</mat-icon>
+    </button>
+  </div>
+</div>
+
+<div class="header">
+  <h2>REPORT</h2>
+</div>
+
+<div class="filter-bar">
+  <select>
+    <option disabled selected>Machine</option>
+  </select>
+  <select>
+    <option disabled selected>Model</option>
+  </select>
+  <select>
+    <option disabled selected>Defects</option>
+  </select>
+
+  <input type="datetime-local" placeholder="Start Date & Time" />
+
+  <input type="datetime-local" placeholder="End Date & Time" />
+  <select style="visibility: hidden">
+    <option disabled selected>Batch Id</option>
+  </select>
+  <select style="visibility: hidden">
+    <option disabled selected>Shift</option>
+  </select>
+  <select style="visibility: hidden">
+    <option disabled selected>Hold Qty</option>
+  </select>
+
+  <button mat-button class="download-btn-circle" (click)="openPopup()">
+    <mat-icon>download</mat-icon>
+  </button>
+
+  <div class="title-bar">
+    <button
+      mat-icon-button
+      class="refresh-btn-circle"
+      (click)="startSpin()"
+      [class.spinning]="isSpinning"
+      matTooltip="Refresh"
+    >
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+</div>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+  <!-- Machine Column -->
+  <ng-container matColumnDef="machine">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Machine</th>
+    <td mat-cell *matCellDef="let element">{{ element.equipmentNAme }}</td>
+  </ng-container>
+
+  <!-- Model Column -->
+  <ng-container matColumnDef="model">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Model</th>
+    <td mat-cell *matCellDef="let element">{{ element.modelName }}</td>
+  </ng-container>
+
+  <!-- Part Name Column -->
+  <ng-container matColumnDef="partName">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Part Name</th>
+    <td mat-cell *matCellDef="let element">{{ element.partName }}</td>
+  </ng-container>
+
+  <!-- Start Time Column -->
+  <ng-container matColumnDef="startTime">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Time</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.varientStartTime | date: "short" }}
+    </td>
+  </ng-container>
+
+  <!-- End Time Column -->
+  <ng-container matColumnDef="endTime">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>End Time</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.varientEndTime | date: "short" }}
+    </td>
+  </ng-container>
+
+  <!-- Inspection Result Column -->
+  <ng-container matColumnDef="inspectionResult">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Inspection Result</th>
+    <td mat-cell *matCellDef="let element">{{ element.inspectionResult }}</td>
+  </ng-container>
+
+  <!-- Actual Production Quantity Column -->
+  <ng-container matColumnDef="actualProdQty">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Actual Prod.Qty</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.actualProductionQuantity }}
+    </td>
+  </ng-container>
+
+  <!-- Hold Quantity Column -->
+  <ng-container matColumnDef="holdQty">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Hold Quantity</th>
+    <td mat-cell *matCellDef="let element">{{ element.rejectionQuantity }}</td>
+  </ng-container>
+
+  <!-- Shift Column -->
+  <ng-container matColumnDef="shift">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Shift</th>
+    <td mat-cell *matCellDef="let element">{{ element.shift }}</td>
+  </ng-container>
+
+  <!-- Action Column
+  <ng-container matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef>Action</th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-button color="primary" (click)="onAction(element)">Action</button>
+    </td>
+  </ng-container> -->
+
+  <!-- Row Definitions -->
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
+
+<!-- Paginator -->
+<mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons></mat-paginator>

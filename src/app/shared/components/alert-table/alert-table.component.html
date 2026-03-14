@@ -1,0 +1,204 @@
+<h2 mat-dialog-title class="dialog-header">
+  Alert Notifications Details
+  <button
+    mat-icon-button
+    mat-dialog-close
+    class="close-button"
+    aria-label="Close"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+</h2>
+
+<mat-dialog-content>
+  <div class="header">
+    <div class="search-container">
+      <!-- Sheet Number Input -->
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Sheet Number</mat-label>
+        <input
+          matInput
+          [(ngModel)]="searchSheetNumber"
+          placeholder="Search Sheet Number"
+          (input)="onSearch()"
+        />
+      </mat-form-field>
+
+      <!-- Variant Code Autocomplete -->
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Variant Code</mat-label>
+        <input
+          matInput
+          [formControl]="variantCtrl"
+          placeholder="Search Variant"
+          [matAutocomplete]="varAuto"
+          (input)="onVariantInput()"
+        />
+        <mat-autocomplete
+          #varAuto="matAutocomplete"
+          (optionSelected)="selectVariant($event.option.value)"
+        >
+          <mat-option *ngFor="let v of allVariant" [value]="v.variantCode">
+            {{ v.variantCode }} - {{ v.variantName }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <!-- Program Number Autocomplete -->
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Program Number</mat-label>
+        <input
+          matInput
+          [formControl]="programCtrl"
+          placeholder="Search Program"
+          [matAutocomplete]="progAuto"
+          (input)="onProgramInput()"
+        />
+        <mat-autocomplete
+          #progAuto="matAutocomplete"
+          (optionSelected)="selectProgram($event.option.value)"
+        >
+          <mat-option *ngFor="let p of allProgram" [value]="p.programNumber">
+            {{ p.programNumber }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <!-- Severity Select -->
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Severity</mat-label>
+        <mat-select
+          [(ngModel)]="selectedSeverity"
+          (selectionChange)="onSearch()"
+        >
+          <mat-option *ngFor="let s of severityOptions" [value]="s">
+            {{ s | titlecase }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Start Date (Material Datepicker) -->
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Start Date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="startPicker"
+          [max]="today"
+          [(ngModel)]="startDateModel"
+          (dateChange)="onStartDateChange($event)"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="startPicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+      </mat-form-field>
+
+      <!-- End Date (Material Datepicker) -->
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>End Date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="endPicker"
+          [max]="today"
+          [(ngModel)]="endDateModel"
+          (dateChange)="onEndDateChange($event)"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="endPicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+      </mat-form-field>
+
+      <!-- Buttons -->
+      <button mat-raised-button (click)="resetForm()" class="reset-btn">
+        Reset
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="submitForm()"
+        class="submit-btn"
+      >
+        <mat-icon>search</mat-icon>
+        Search
+      </button>
+    </div>
+
+    <!-- Validation message -->
+    <div *ngIf="dateError" class="error-text">
+      {{ dateError }}
+    </div>
+  </div>
+
+  <table
+    mat-table
+    [dataSource]="alertList"
+    class="styled-table mat-elevation-z8"
+  >
+    <!-- ID Column -->
+    <ng-container matColumnDef="Sheet Number">
+      <th mat-header-cell *matHeaderCellDef>Sheet Number</th>
+      <td mat-cell *matCellDef="let element">{{ element.sheetNumber }}</td>
+    </ng-container>
+    <!-- Variant Code -->
+
+    <ng-container matColumnDef="Variant Code">
+      <th mat-header-cell *matHeaderCellDef>Variant Code</th>
+      <td mat-cell *matCellDef="let element">{{ element.variantCode }}</td>
+    </ng-container>
+
+    <!-- Program Number -->
+    <ng-container matColumnDef="Program Number">
+      <th mat-header-cell *matHeaderCellDef>Program Number</th>
+      <td mat-cell *matCellDef="let element">{{ element.programNumber }}</td>
+    </ng-container>
+
+    <!-- Timestamp -->
+    <ng-container matColumnDef="Timestamp">
+      <th mat-header-cell *matHeaderCellDef>Timestamp</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.createdTime | date: "short" }}
+      </td>
+    </ng-container>
+
+    <!-- Alert Code -->
+    <ng-container matColumnDef="Alert Code">
+      <th mat-header-cell *matHeaderCellDef>Alert Code</th>
+      <td mat-cell *matCellDef="let element">{{ element.alertCode }}</td>
+    </ng-container>
+
+    <!-- Severity -->
+    <ng-container matColumnDef="Severity">
+      <th mat-header-cell *matHeaderCellDef>Severity</th>
+      <td mat-cell *matCellDef="let element">
+        <span class="badge" [ngClass]="element.severity">
+          {{ element.severity | titlecase }}
+        </span>
+      </td>
+    </ng-container>
+
+    <!-- Alert Message -->
+    <ng-container matColumnDef="Alert Message">
+      <th mat-header-cell *matHeaderCellDef>Alert Message</th>
+      <td mat-cell *matCellDef="let element">{{ element.description }}</td>
+    </ng-container>
+
+    <!-- Header & Row Declarations -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      [ngClass]="row.severity"
+    ></tr>
+  </table>
+  <mat-paginator
+    [length]="paginationDtls.totalElements"
+    [pageSize]="paginationDtls.pageSize"
+    [pageIndex]="paginationDtls.pageNumber - 1"
+    [pageSizeOptions]="[10]"
+    (page)="onPageChange($event)"
+  >
+  </mat-paginator>
+</mat-dialog-content>

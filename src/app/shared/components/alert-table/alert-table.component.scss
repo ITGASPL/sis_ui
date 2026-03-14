@@ -1,0 +1,189 @@
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-button {
+  margin: -12px -12px -12px auto;
+}
+.full-width-table {
+  width: auto;
+}
+
+.severity-info {
+  color: blue;
+  font-weight: 500;
+}
+
+.severity-CRITICAL {
+  color: rgb(255, 72, 0);
+  font-weight: 600;
+}
+
+.severity-success {
+  color: green;
+  font-weight: 600;
+}
+
+
+
+////////
+/// 
+/// 
+.table-wrapper {
+  padding: 16px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.table-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.styled-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+
+.styled-table th {
+  font-weight: 600;
+  color: #555;
+  background: #f5f5f5;
+}
+
+.styled-table td, 
+.styled-table th {
+  padding: 12px 16px;
+  text-align: left;
+}
+
+.styled-table tr {
+  border-radius: 8px;
+}
+
+.OTHERS {
+  background-color: #e3f2fd; /* light blue */
+}
+
+.CRITICAL {
+  background-color: #ffebee; /* light red */
+}
+
+.MAJOR {
+  background-color: #fff3e0; /* light orange */
+}
+
+.MINOR {
+  background-color: #fffde7; /* light yellow */
+}
+
+/* Badge style */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 12px;
+  text-transform: capitalize;
+}
+
+// .badge.OTHERS {
+//   background: #bbdefb;
+//   color: #0d47a1;
+// }
+
+// .badge.CRITICAL {
+//   background: #e8aba7f6;
+//   color: #f01405f6;
+// }
+
+// .badge.MAJOR {
+//   background: #e5c588;
+//   color: #e69600;
+// }
+// .badge.MINOR {
+//   background: #f5e9b5;
+//   color: #f7cd10;
+// }
+
+.badge.OTHERS {
+  background: #90caf9;   /* light blue */
+  color: #0d47a1;   
+ // border: 1px solid #90caf9;     /* deep blue */
+}
+
+.badge.CRITICAL {
+  background: #ef9a9a;   /* light red */
+  color: #c62828;        /* strong red */
+}
+
+.badge.MAJOR {
+  background: #ffb74d;   /* light orange */
+  color: #ef6c00;        /* dark orange */
+}
+
+.badge.MINOR {
+  background: #fff176;   /* light yellow */
+  color: #f9a825;        /* dark yellow */
+}
+///// search functionality
+.search-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 2px 10px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+}
+
+.search-field {
+  flex: 1 1 150px;
+  min-width: 150px;
+}
+
+.search-field ::ng-deep .mat-mdc-form-field {
+  width: 100%;
+}
+
+.reset-btn, .submit-btn {
+  padding: 6px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  height: 40px;
+  min-width: 100px;
+  border-radius: 4px;
+   margin-bottom: 20px;
+}
+
+.reset-btn {
+  background-color: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.reset-btn:hover {
+  background-color: #e8e8e8;
+}
+
+.submit-btn {
+  background-color: #16C5CF;
+  color: white;
+}
+
+.submit-btn:hover {
+  background-color: #16C5CF;
+}
+.error-text {
+  color: #d32f2f;
+  font-size: 13px;
+  margin-top: 6px;
+  margin-left: 4px;
+}

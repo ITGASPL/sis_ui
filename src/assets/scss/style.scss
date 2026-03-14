@@ -1,0 +1,45 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+
+@use "themecolors/orange_theme";
+
+@use "variables" as *;
+@use "override-component";
+@use "theme-variables/default-variables";
+@use "theme-variables/light-theme-variables";
+
+//container layout
+@use "layouts/transitions";
+@use "helpers/color";
+@use "helpers/border-color";
+@use "helpers/icon-size";
+@use "container";
+@use "layouts/layouts";
+@use "grid/grid";
+@use "helpers/custom-flex";
+@use "helpers";
+
+// pages
+@use "pages/auth";
+@import "pages/dashboards";
+
+/* styles.css or styles.scss (global) */
+
+
+.mat-simple-snackbar-action {
+  color: #fff !important;
+  font-weight: bold !important;
+}
+
+.boxed-auth .mat-dialog-container {
+  border-radius: 42px !important;
+  box-shadow:
+    0 15px 25px rgba(0, 0, 0, 0.05),
+    0 20px 35px rgba(0, 0, 0, 0.08),
+    0 30px 55px rgba(0, 0, 0, 0.1);
+  background-color: #bf1010 !important;
+}
+
+
+
+

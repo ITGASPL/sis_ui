@@ -1,0 +1,32 @@
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: url('src/assets/fonts/dm-sans-v16-latin-regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 500;
+  src: url('src/assets/fonts/dm-sans-v16-latin-500.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: url('src/assets/fonts/dm-sans-v16-latin-600.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: url('src/assets/fonts/dm-sans-v16-latin-700.woff2') format('woff2');
+}
+
+/* Optional: apply globally */
+body {
+  font-family: 'DM Sans', sans-serif;
+}

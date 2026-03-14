@@ -1,0 +1,56 @@
+<style>
+  .bg-error {
+    height: 18px;
+    margin: 0px;
+  }
+  .bg-success {
+    height: 18px;
+    margin: 0px;
+  }
+  .img_icon {
+    color: white;
+    background-color: rgb(3, 201, 215);
+  }
+</style>
+<mat-card class="cardWithShadow">
+  <mat-card-content>
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" class="w-100">
+        <!-- Position Column -->
+        <ng-container matColumnDef="No">
+          <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">No</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.id }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="Sheet">
+          <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+            Sheet
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.sheet }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="Image">
+          <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+            Image
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-icon class="img_icon">visibility</mat-icon>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="Thickness">
+          <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+            Thickness
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.thickness }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </mat-card-content>
+</mat-card>
