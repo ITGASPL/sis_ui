@@ -66,7 +66,7 @@ export class AlertTableComponent implements OnInit {
     private alertService: AlertService,
     private service: VariantService,
     private inspectionService: InspectionService,
-  ) {}
+  ) { }
   alertList: any[] = [];
   paginationDtls = {
     pageNumber: 1,
@@ -179,28 +179,25 @@ export class AlertTableComponent implements OnInit {
     },
   ];
 
-  validateDateRange(): void {
-    const start = new Date(this.startDate);
-    const end = new Date(this.endDate);
-    const today = new Date();
+ validateDateRange(): void {
+  const start = new Date(this.startDate);
+  const end = new Date(this.endDate);
+  const today = new Date();
 
-    // Remove time part
-    today.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
 
-    if ((this.startDate && start > today) || (this.endDate && end > today)) {
-      this.dateError = 'Date cannot be greater than today';
-      return;
-    }
-
-    if (this.startDate && this.endDate && end < start) {
-      this.dateError = 'End Date cannot be earlier than Start Date';
-      return;
-    }
-
-    // ✅ If all good
-    this.dateError = '';
-    this.onSearch();
+  if ((this.startDate && start > today) || (this.endDate && end > today)) {
+    this.dateError = 'Date cannot be greater than today';
+    return;
   }
+
+  if (this.startDate && this.endDate && end < start) {
+    this.dateError = 'End Date cannot be earlier than Start Date';
+    return;
+  }
+
+  this.dateError = '';
+}
 
   ngOnInit() {
     this.loadData();
@@ -238,51 +235,46 @@ export class AlertTableComponent implements OnInit {
   selectVariant(code: string) {
     // When user selects variant from autocomplete
     this.searchVariantCode = code;
-    this.onSearch();
   }
 
   onVariantInput() {
     // Update searchVariantCode when user types
     this.searchVariantCode = this.variantCtrl.value || '';
-    this.onSearch();
   }
 
   selectProgram(number: string) {
     // When user selects program from autocomplete
     this.searchProgramNumber = number;
-    this.onSearch();
   }
 
   onProgramInput() {
     // Update searchProgramNumber when user types
     this.searchProgramNumber = this.programCtrl.value || '';
-    this.onSearch();
   }
 
-  onStartDateChange(event: any) {
-    const d: Date | null = event?.value ?? null;
-    if (d) {
-      // store as yyyy-mm-dd string to keep existing logic
-      this.startDate = d.toISOString().split('T')[0];
-      this.startDateModel = d;
-    } else {
-      this.startDate = '';
-      this.startDateModel = null;
-    }
-    this.validateDateRange();
-  }
+onStartDateChange(event: any) {
+  const d: Date | null = event?.value ?? null;
 
-  onEndDateChange(event: any) {
-    const d: Date | null = event?.value ?? null;
-    if (d) {
-      this.endDate = d.toISOString().split('T')[0];
-      this.endDateModel = d;
-    } else {
-      this.endDate = '';
-      this.endDateModel = null;
-    }
-    this.validateDateRange();
+  if (d) {
+    d.setHours(0, 0, 0, 0);
+    this.startDate = d.toISOString();   // ✅ FIX
+    this.startDateModel = d;
+  } else {
+    this.startDate = '';
   }
+}
+
+onEndDateChange(event: any) {
+  const d: Date | null = event?.value ?? null;
+
+  if (d) {
+    d.setHours(23, 59, 59, 999);
+    this.endDate = d.toISOString();   // ✅ FIX
+    this.endDateModel = d;
+  } else {
+    this.endDate = '';
+  }
+}
   onPageChange(event: PageEvent) {
     this.paginationDtls.pageNumber = event.pageIndex + 1;
     this.paginationDtls.pageSize = event.pageSize;
@@ -298,40 +290,60 @@ export class AlertTableComponent implements OnInit {
           res.paginationDtls?.totalElements || 0;
       });
   }
-  onSeverityChange(element: any) {}
+  onSeverityChange(element: any) { }
 
-  resetForm() {
-    this.searchSheetNumber = '';
-    this.variantCtrl.setValue('');
-    this.programCtrl.setValue('');
-    this.searchSeverity = '';
-    this.startDate = '';
-    this.endDate = '';
-    this.startDateModel = null;
-    this.endDateModel = null;
-    this.dateError = '';
-    this.loadData();
-  }
+resetForm() {
+  this.searchSheetNumber = '';
+  this.variantCtrl.setValue('');
+  this.programCtrl.setValue('');
+  this.searchVariantCode = '';
+  this.searchProgramNumber = '';
+  this.selectedSeverity = '';
+
+  this.startDate = '';
+  this.endDate = '';
+  this.startDateModel = null;
+  this.endDateModel = null;
+
+  this.dateError = '';
+
+  this.paginationDtls.pageNumber = 1;
+
+  this.loadData();
+}
   onSearch() {
-    console.log('Search triggered:', {
-      sheet: this.searchSheetNumber,
-      variant: this.searchVariantCode,
-      program: this.searchProgramNumber,
-      severity: this.searchSeverity,
-    });
-  }
-  submitForm() {
-    // Combine all search values and submit
     const alertFilter = {
       sheetNumber: this.searchSheetNumber,
       variantCode: this.searchVariantCode,
       programNumber: this.searchProgramNumber,
-      severity: this.searchSeverity,
+      severity: this.selectedSeverity, // FIX
       startDate: this.startDate,
       endDate: this.endDate,
       unreadOnly: false,
     };
 
+    this.paginationDtls.pageNumber = 1;
+
     this.loadData(alertFilter);
   }
+
+
+ submitForm() {
+
+  if (this.dateError) return;
+
+  const alertFilter = {
+    sheetNumber: this.searchSheetNumber,
+    variantCode: this.searchVariantCode,
+    programNumber: this.searchProgramNumber,
+    severity: this.selectedSeverity,
+    startDate: this.startDate,
+    endDate: this.endDate,
+    unreadOnly: false,
+  };
+console.log("FILTER SENT", alertFilter); 
+  this.paginationDtls.pageNumber = 1;
+
+  this.loadData(alertFilter);
+}
 }

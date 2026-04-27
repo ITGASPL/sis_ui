@@ -8,13 +8,14 @@ import { MaterialModule } from 'src/app/material.module';
 import { MatLineModule } from '@angular/material/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { FilterBarComponent } from 'src/app/shared/components/filter-bar/filter-bar.component';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Component({
   selector: 'app-model',
+  standalone: true,
   imports: [
     FilterBarComponent,
     CommonModule,
@@ -25,14 +26,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatCardModule,
     FormsModule,
     MatIconModule,
-    MatToolbarModule,
-    // Remove MatSnackBarModule from here
+    MatToolbarModule
   ],
   templateUrl: './model.component.html',
   styleUrl: './model.component.scss',
   providers: [ModelService],
 })
 export class ModelComponent implements OnInit {
+
   modelList: any[] = [];
   form!: FormGroup;
   show = false;
@@ -59,7 +60,7 @@ export class ModelComponent implements OnInit {
       description: [''],
     });
 
-    this.loadData(); // Load first time with empty search
+    this.loadData();
   }
 
   loadData() {
@@ -96,21 +97,34 @@ export class ModelComponent implements OnInit {
     this.show = false;
   }
 
+  // ✅ FIXED SUBMIT WITH COLORS
   onSubmit() {
     const formData = this.form.value;
 
     if (this.editMode) {
       const updatedData = { id: this.editId, ...formData };
-      this.service.updateModel(updatedData).subscribe(() => {
-        this.showSnackbar('Record updated successfully');
-        this.loadData();
-        this.close();
+
+      this.service.updateModel(updatedData).subscribe({
+        next: () => {
+          this.showSnackbar('Record updated successfully', 'update-snackbar');
+          this.loadData();
+          this.close();
+        },
+        error: () => {
+          this.showSnackbar('Update failed', 'delete-snackbar');
+        }
       });
+
     } else {
-      this.service.createModel(formData).subscribe(() => {
-        this.showSnackbar('Record created successfully');
-        this.loadData();
-        this.close();
+      this.service.createModel(formData).subscribe({
+        next: () => {
+          this.showSnackbar('Record created successfully', 'success-snackbar');
+          this.loadData();
+          this.close();
+        },
+        error: () => {
+          this.showSnackbar('Creation failed', 'delete-snackbar');
+        }
       });
     }
   }
@@ -120,25 +134,33 @@ export class ModelComponent implements OnInit {
       modelName: item.modelName,
       description: item.description,
     });
+
     this.editId = item.id;
     this.editMode = true;
     this.show = true;
   }
-  showSnackbar(message: string, panelClass: string = 'success-snackbar') {
+
+  deleteModel(id: number) {
+    if (confirm('Are you sure you want to delete this record?')) {
+      this.service.deleteModel(id).subscribe({
+        next: () => {
+          this.showSnackbar('Record deleted successfully', 'delete-snackbar');
+          this.loadData();
+        },
+        error: () => {
+          this.showSnackbar('Delete failed', 'delete-snackbar');
+        }
+      });
+    }
+  }
+
+  // ✅ COMMON SNACKBAR METHOD
+  showSnackbar(message: string, panelClass: string) {
     this.snackBar.open(message, 'Close', {
       duration: 3000,
       verticalPosition: 'top',
       horizontalPosition: 'right',
       panelClass: [panelClass],
     });
-  }
-
-  deleteModel(id: number) {
-    if (confirm('Are you sure you want to delete this record?')) {
-      this.service.deleteModel(id).subscribe(() => {
-        this.showSnackbar('Record deleted successfully');
-        this.loadData();
-      });
-    }
   }
 }

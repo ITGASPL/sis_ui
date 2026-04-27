@@ -244,3 +244,17 @@ input {
 .download-btn:hover {
   background-color: #175760;
 }
+.success-snackbar {
+  background-color: #4caf50 !important;
+  color: #fff !important;
+}
+
+.update-snackbar {
+  background-color: #2196f3 !important;
+  color: #fff !important;
+}
+
+.delete-snackbar {
+  background-color: #f44336 !important;
+  color: #fff !important;
+}

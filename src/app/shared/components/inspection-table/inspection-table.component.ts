@@ -93,16 +93,21 @@ export class InspectionTableComponent implements OnChanges {
 
   openPopup(rowData: any | null): void {
     console.log('Row data:', rowData);
-    const sheetId = rowData?.sheetId;
-    this.selectedRowData = rowData ?? {};
-    this.isLoading = true; // ✅ show loading spinner
-    if (this.variantType === 'Oscillator' && sheetId % 2 === 0) {
-      this.finalcuttingImageUrlLink = this.cuttingImageUrlLink1;
-      this.finalloffset = this.leftOffset1 * 0.38;
-    } else if (this.variantType === 'Oscillator' && sheetId % 2 !== 0) {
-      this.finalcuttingImageUrlLink = this.cuttingImageUrlLink2;
-      this.finalloffset = this.leftOffset2 * 0.38;
-    } else {
+   const sheetId = rowData?.sheetId;
+
+// ✅ Extract actual sheet number
+const sheetNo = Number(rowData?.sheetNumber.split('_')[1]);
+
+if (this.variantType === 'Oscillator' && sheetNo % 2 === 0) {
+  // ✅ EVEN → recipeProfile2
+  this.finalcuttingImageUrlLink = this.cuttingImageUrlLink2;
+  this.finalloffset = this.leftOffset2 * 0.38;
+} 
+else if (this.variantType === 'Oscillator' && sheetNo % 2 !== 0) {
+  // ✅ ODD → recipeProfile1
+  this.finalcuttingImageUrlLink = this.cuttingImageUrlLink1;
+  this.finalloffset = this.leftOffset1 * 0.38;
+} else {
       this.finalcuttingImageUrlLink = this.cuttingImageUrlLink1;
       this.finalloffset = this.leftOffset1;
     }
@@ -124,7 +129,7 @@ export class InspectionTableComponent implements OnChanges {
           panelClass: 'inspection-popupview',
           disableClose: true,
           data: {
-            selectedRowData: this.selectedRowData,
+            selectedRowData: rowData,
             imageUrl: this.imageUrl,
             cuttingImageUrl: this.finalcuttingImageUrlLink,
             leftOffset: this.finalloffset,

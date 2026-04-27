@@ -36,7 +36,7 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Master Data',
     iconName: 'book',
-
+    requiresAuth: true,
     children: [
       {
         displayName: 'Equipment',

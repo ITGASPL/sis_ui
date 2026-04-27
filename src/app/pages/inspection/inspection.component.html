@@ -73,13 +73,13 @@
             <div class="info-wrapper">
               <span
                 >Model:
-                <strong>{{ currentDyeData?.modelName }}</strong>
+                <strong>{{ currentRecipeData?.vartiantMasterDTO?.programDto?.model }}</strong>
                 &nbsp;&nbsp;&nbsp;&nbsp;<span
                   >PE code:
-                  <strong>{{ currentDyeData?.coilCode }}</strong></span
+                  <strong>{{ currentRecipeData?.vartiantMasterDTO?.coilCode }}</strong></span
                 >&nbsp;&nbsp;&nbsp;&nbsp;<span
                   >Program No:
-                  <strong>{{ currentDyeData?.programNumber }}</strong></span
+                  <strong>{{ currentRecipeData?.vartiantMasterDTO?.programDto?.programNumber }}</strong></span
                 >
                 &nbsp;&nbsp;&nbsp;&nbsp;<span class="tag"
                   >Shift: <strong>{{ currentShift }}</strong></span
@@ -90,7 +90,7 @@
               </span>
 
               <span
-                >Part name: <strong>{{ currentDyeData?.varientName }}</strong
+                >Part name: <strong>{{ currentRecipeData?.vartiantMasterDTO?.variantName }}</strong
                 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <span class="tag"
                   >Production Date:
@@ -132,6 +132,9 @@
         </div>
 
         <div class="table-container">
+          <div *ngIf="!summaryData || summaryData.length === 0" class="no-data">
+             Waiting for NG sheets...
+          </div>
           <app-inspection-table
             [inspectionTableData]="summaryData"
             [cuttingImageUrlLink1]="cuttingImageUrl1"

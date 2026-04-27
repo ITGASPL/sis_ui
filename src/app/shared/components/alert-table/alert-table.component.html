@@ -20,7 +20,6 @@
           matInput
           [(ngModel)]="searchSheetNumber"
           placeholder="Search Sheet Number"
-          (input)="onSearch()"
         />
       </mat-form-field>
 
@@ -69,7 +68,6 @@
         <mat-label>Severity</mat-label>
         <mat-select
           [(ngModel)]="selectedSeverity"
-          (selectionChange)="onSearch()"
         >
           <mat-option *ngFor="let s of severityOptions" [value]="s">
             {{ s | titlecase }}
