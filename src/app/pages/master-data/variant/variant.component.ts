@@ -218,40 +218,50 @@ export class VariantComponent implements OnInit {
   onSubmit() {
     const formValue = this.form.getRawValue();
 
-    const data = {
-      variantName: formValue.variantName,
-      commonName: formValue.commonName,
-      coilCode: formValue.coilCode,
-      minimumSheetThickness: Number(formValue.minimumSheetThickness),
-      maximumSheetThickness: Number(formValue.maximumSheetThickness),
-      nominalSheetThickness: Number(formValue.nominalSheetThickness),
-      thicknessUnit: formValue.thicknessUnit,
-      variantCode: formValue.variantCode,
-      partDescription: formValue.partDescription,
-      output1Description: formValue.output1Description,
-      feedLength: Number(formValue.feedLength),
-      feedLengthUnit: formValue.feedLengthUnit,
-      widthNominal: Number(formValue.widthNominal),
-      widthUnit: formValue.widthUnit,
-      varientType: formValue.varientType,
-      lo1: Number(formValue.lo1) || 0,
-      lo2: Number(formValue.lo2) || 0,
-      depthOffset: Number(formValue.depthOffset) || 0,
-      programDto: {
-        programId: Number(formValue.programId),
-      },
-    };
+    const data: any = {
+  id: this.editMode ? this.editId : null,
 
-    const formData = new FormData();
-    formData.append('variantMasterData', JSON.stringify(data));
+  variantName: formValue.variantName,
+  commonName: formValue.commonName,
+  coilCode: formValue.coilCode,
 
-    if (this.selectedFile1) {
-      formData.append('recipeProfile1', this.selectedFile1);
-    }
+  minimumSheetThickness: Number(formValue.minimumSheetThickness),
+  maximumSheetThickness: Number(formValue.maximumSheetThickness),
+  nominalSheetThickness: Number(formValue.nominalSheetThickness),
 
-    if (this.selectedFile2 && this.showLo2) {
-      formData.append('recipeProfile2', this.selectedFile2);
-    }
+  thicknessUnit: formValue.thicknessUnit,
+  variantCode: formValue.variantCode,
+
+  partDescription: formValue.partDescription,
+  output1Description: formValue.output1Description,
+
+  feedLength: Number(formValue.feedLength),
+  feedLengthUnit: formValue.feedLengthUnit,
+
+  widthNominal: Number(formValue.widthNominal),
+  widthUnit: formValue.widthUnit,
+
+  varientType: formValue.varientType,
+
+  lo1: Number(formValue.lo1) || 0,
+  lo2: Number(formValue.lo2) || 0,
+  depthOffset: Number(formValue.depthOffset) || 0,
+
+  programDto: {
+    programId: Number(formValue.programId)
+  }
+};
+
+   const formData = new FormData();
+formData.append('variantMasterData', JSON.stringify(data));
+
+if (this.selectedFile1) {
+  formData.append('recipeProfile1', this.selectedFile1);
+}
+
+if (this.selectedFile2 && this.showLo2) {
+  formData.append('recipeProfile2', this.selectedFile2);
+}
 
     if (this.editMode) {
       this.service.updateVariant(formData).subscribe({
@@ -280,34 +290,64 @@ export class VariantComponent implements OnInit {
 
 
   // ✏️ Edit
-  edit(item: any) {
-    this.form.patchValue(item);
-    this.editId = item.id;
-    this.editMode = true;
-    this.show = true;
-    this.loadImages(item.id);
-  }
-  loadImages(id: number) {
+ edit(item: any) {
 
-  // 🔹 IMAGE 1 (index = 1)
+  this.editId = item.id;
+  this.editMode = true;
+  this.show = true;
+
+  // first enable
+  this.form.get('programId')?.enable();
+
+  this.form.patchValue({
+    ...item,
+    programId: item.programDto?.programId,
+    programNumber: item.programDto?.programNumber
+  });
+
+  // disable again after value set
+  this.form.get('programId')?.disable();
+
+  this.loadImages(item.id);
+}
+loadImages(id: number) {
+
+  // MAIN FILE
   this.service.getImagedetailsDataService(id.toString(), '1')
     .subscribe({
       next: (blob: Blob) => {
+
         this.image1 = URL.createObjectURL(blob);
+
+        // AUTO FILE FOR UPDATE
+        this.selectedFile1 = new File(
+          [blob],
+          'recipeProfile1.png',
+          { type: blob.type || 'image/png' }
+        );
       },
       error: () => {
         this.image1 = null;
+        this.selectedFile1 = null as any;
       }
     });
 
-  // 🔹 IMAGE 2 (index = 2)
+  // SECOND FILE
   this.service.getImagedetailsDataService(id.toString(), '2')
     .subscribe({
       next: (blob: Blob) => {
+
         this.image2 = URL.createObjectURL(blob);
+
+        this.selectedFile2 = new File(
+          [blob],
+          'recipeProfile2.png',
+          { type: blob.type || 'image/png' }
+        );
       },
       error: () => {
         this.image2 = null;
+        this.selectedFile2 = null as any;
       }
     });
 }
